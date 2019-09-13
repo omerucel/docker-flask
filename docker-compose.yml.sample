@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nginx:
+    container_name: flask_nginx
+    image: nginx:latest
+    ports:
+      - 80
+    depends_on:
+      - app
+    volumes:
+      - ./docker-files/vhost.conf:/etc/nginx/conf.d/default.conf
+      - ./:/data/project
+  app:
+    container_name: flask_app
+    build: .
+    environment:
+      GUNICORN_CMD_ARGS: --bind 0.0.0.0:8080 --workers 3 --chdir /data/project --reload
+    depends_on:
+      - database
+    volumes:
+      - ./:/data/project
+  database:
+    container_name: flask_mysql
+    image: mysql:5.7
+    ports:
+      - 3306
+    environment:
+      MYSQL_DATABASE: "project"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"

@@ -1,0 +1,7 @@
+.idea
+__pycache__/
+.DS_STORE
+*.py[cod]
+*$py.class
+.env
+docker-compose.yml
